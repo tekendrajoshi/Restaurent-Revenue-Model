@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Revenue Predictor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f4fc;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+        }
+        .error {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fdecea;
+            border-radius: 4px;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Restaurant Revenue Prediction</h1>
+    
+    <div class="form-container">
+        {% if error %}
+            <div class="error">
+                <strong>Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+        
+        <form method="POST">
+            <div class="two-column">
+                <!-- Column 1 -->
+                <div>
+                    <div class="form-group">
+                        <label for="Location">Location:</label>
+                        <input type="text" id="Location" name="Location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Cuisine">Cuisine Type:</label>
+                        <input type="text" id="Cuisine" name="Cuisine" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Rating">Rating (1-5):</label>
+                        <input type="number" id="Rating" name="Rating" min="1" max="5" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Seating_Capacity">Seating Capacity:</label>
+                        <input type="number" id="Seating_Capacity" name="Seating_Capacity" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Average_Meal_Price">Average Meal Price ($):</label>
+                        <input type="number" id="Average_Meal_Price" name="Average_Meal_Price" min="0" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Marketing_Budget">Monthly Marketing Budget ($):</label>
+                        <input type="number" id="Marketing_Budget" name="Marketing_Budget" min="0" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Social_Media_Followers">Social Media Followers:</label>
+                        <input type="number" id="Social_Media_Followers" name="Social_Media_Followers" min="0" required>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <div class="form-group">
+                        <label for="Chef_Experience_Years">Chef Experience (Years):</label>
+                        <input type="number" id="Chef_Experience_Years" name="Chef_Experience_Years" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Number_of_Reviews">Number of Reviews:</label>
+                        <input type="number" id="Number_of_Reviews" name="Number_of_Reviews" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Avg_Review_Length">Average Review Length (words):</label>
+                        <input type="number" id="Avg_Review_Length" name="Avg_Review_Length" min="0" step="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Ambience_Score">Ambience Score (1-10):</label>
+                        <input type="number" id="Ambience_Score" name="Ambience_Score" min="1" max="10" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Service_Quality_Score">Service Quality Score (1-10):</label>
+                        <input type="number" id="Service_Quality_Score" name="Service_Quality_Score" min="1" max="10" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Parking_Availability">Parking Availability:</label>
+                        <select id="Parking_Availability" name="Parking_Availability" required>
+                            <option value="Yes">Available</option>
+                            <option value="No">Not Available</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Weekend_Reservations">Weekend Reservations (per day):</label>
+                        <input type="number" id="Weekend_Reservations" name="Weekend_Reservations" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Weekday_Reservations">Weekday Reservations (per day):</label>
+                        <input type="number" id="Weekday_Reservations" name="Weekday_Reservations" min="0" required>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit">Predict Revenue</button>
+        </form>
+    </div>
+    
+    {% if prediction %}
+        <div class="result">
+            <h2>Prediction Result</h2>
+            <p>The estimated monthly revenue is: <strong>${{ "{:,.2f}".format(prediction) }}</strong></p>
+        </div>
+    {% endif %}
+</body>
+</html>
